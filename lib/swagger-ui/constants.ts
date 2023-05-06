@@ -72,7 +72,7 @@ export const htmlTemplateString = `
 
 <script src="<% baseUrl %>swagger-ui-bundle.js"> </script>
 <script src="<% baseUrl %>swagger-ui-standalone-preset.js"> </script>
-<script src="<% baseUrl %>swagger-ui-init.js"> </script>
+<script src="<% baseUrl %>swagger-ui-init-<% swaggerHash %>.js"> </script>
 <% customJs %>
 <% customJsStr %>
 <% customCssUrl %>

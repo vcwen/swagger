@@ -19,6 +19,7 @@ import { getGlobalPrefix } from './utils/get-global-prefix';
 import { validatePath } from './utils/validate-path.util';
 import { normalizeRelPath } from './utils/normalize-rel-path';
 import { validateGlobalPrefix } from './utils/validate-global-prefix.util';
+import { sha1 } from './utils/hash'
 
 export class SwaggerModule {
   public static createDocument(
@@ -74,8 +75,9 @@ export class SwaggerModule {
       yamlDocumentUrl: string;
     }
   ) {
+    const hash = sha1(swaggerInitJS)
     httpAdapter.get(
-      normalizeRelPath(`${finalPath}/swagger-ui-init.js`),
+      normalizeRelPath(`${finalPath}/swagger-ui-init-${hash}.js`),
       (req, res) => {
         res.type('application/javascript');
         res.send(swaggerInitJS);
@@ -89,7 +91,7 @@ export class SwaggerModule {
     try {
       httpAdapter.get(
         normalizeRelPath(
-          `${finalPath}/${urlLastSubdirectory}/swagger-ui-init.js`
+          `${finalPath}/${urlLastSubdirectory}/swagger-ui-init-${hash}.js`
         ),
         (req, res) => {
           res.type('application/javascript');
@@ -166,8 +168,10 @@ export class SwaggerModule {
 
     const baseUrlForSwaggerUI = normalizeRelPath(`./${urlLastSubdirectory}/`);
 
-    const html = buildSwaggerHTML(baseUrlForSwaggerUI, document, options);
     const swaggerInitJS = buildSwaggerInitJS(document, options);
+    const swaggerHash = sha1(swaggerInitJS)
+    const html = buildSwaggerHTML(baseUrlForSwaggerUI, swaggerHash, options);
+    
     const httpAdapter = app.getHttpAdapter();
 
     SwaggerModule.serveDocuments(

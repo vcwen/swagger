@@ -66,7 +66,7 @@ function toTags(
  */
 export function buildSwaggerHTML(
   baseUrl: string,
-  swaggerDoc: OpenAPIObject,
+  swaggerHash: string,
   customOptions: SwaggerCustomOptions = {}
 ) {
   const {
@@ -97,5 +97,6 @@ export function buildSwaggerHTML(
       '<% customCssUrl %>',
       toTags(customCssUrl, toExternalStylesheetTag)
     )
-    .replace('<% title %>', customSiteTitle);
+    .replace('<% title %>', customSiteTitle)
+    .replace('<% swaggerHash %>', swaggerHash);
 }
